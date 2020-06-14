@@ -12,6 +12,15 @@
 
 #	include "minishell.h"
 
+char	check_quote(char *str, char quote)
+{
+	if ((*str == '\'' || *str == '\"') && ((quote == 0)))
+		quote = *str;
+	else if ((*str == '\'' || *str == '\"') && (quote == *str))
+		quote = 1;
+	return (quote);
+}
+
 size_t	count_command(char *str)
 {
 	int		colon_flag;
@@ -23,21 +32,19 @@ size_t	count_command(char *str)
 	colon_flag = 1;
 	while (*str != '\0')
 	{
-		if ((*str == '\'' || *str == '\"') && (quote == 0))
-		{
-			quote = *str;
-		}
-		else if ((*str == '\'' || *str == '\"') && (quote == *str))
-		{
-			quote = 0;
-		}
+		quote = check_quote(str, quote);
 		if (*str != ';' && colon_flag == 1)
 		{
 			count++;
 			colon_flag = 0;
 		}
-		if (*str == ';' && quote == 0)
+		if (*str == ';' && (quote == 0))
 			colon_flag = 1;
+		else if (*str == ';' && (quote == 1))
+		{
+			colon_flag = 1;
+			quote = 0;
+		}
 		str++;
 	}
 	return (count);
@@ -56,14 +63,6 @@ static size_t	ft_wordlen(char const *s)
 	return (count);
 }
 
-char	check_quote(char *str, char quote)
-{
-	if ((*str == '\'' || *str == '\"') && (quote == 0))
-		quote = *str;
-	else if ((*str == '\'' || *str == '\"') && (quote == *str))
-		quote = 1;
-	return (quote);
-}
 
 static char		*ft_commanddup(char **str)
 {
@@ -75,14 +74,17 @@ static char		*ft_commanddup(char **str)
 		return (NULL);
 	i = 0;
 	quote = 0;
-	while ((quote = check_quote(*str, quote)|| **str != ';') && **str != '\0')
+	while ((quote || **str != ';') && **str != '\0')
 	{
 		if (!(quote == **str || quote == 1))
 		{
 			result[i] = **str;
 			i++;
 		}
+		if (quote == 1)
+			quote = 0;
 		(*str)++;
+		quote = check_quote(*str, quote);
 	}
 	(*str)--;
 	return (result);
@@ -109,8 +111,14 @@ char	**split_command(char *str)
 				return (free_split(result));
 			colon_flag = 0;
 		}
-		if (*str++ == ';' && (quote == 0 || quote == 1))
+		if (*str == ';' && (quote == 0))
 			colon_flag = 1;
+		else if (*str == ';' && (quote == 1))
+		{
+			colon_flag = 1;
+			quote = 0;
+		}
+		str++;
 	}
 	return (result);
 }

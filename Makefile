@@ -6,7 +6,7 @@ LIB = libft.a
 LIB_DIR = src/libft
 RM = rm -f
 CC = gcc
-CFLAGS = 
+CFLAGS =
 
 .c.o:
 			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I $(INCLUDE)
