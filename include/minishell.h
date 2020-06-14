@@ -6,7 +6,7 @@
 /*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/12 18:23:05 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/06/14 15:08:42 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #	include "./libft.h"
 
 char	**init_env(char *envp[]);
-void	free_split(char **splitted_str);
+void	*free_split(char **splitted_str);
+char	**split_command(char *str);
+
 
 #	endif

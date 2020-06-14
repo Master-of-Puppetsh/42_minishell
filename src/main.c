@@ -6,7 +6,7 @@
 /*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/12 18:54:51 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/06/14 15:08:57 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int			main(int argc, char *argv[], char *envp[])
 			return (1);
 		if (result == 0)
 			return (0);
-		if (!(commands = ft_split(line, ';')))
+		if (!(commands = split_command(line)))
 			return (1);
 		i = 0;
 		while (*(commands + i))
