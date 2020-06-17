@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/17 16:07:54 by hyekim           ###   ########.fr       */
+/*   Created: 2020/06/17 02:18:24 by hyekim            #+#    #+#             */
+/*   Updated: 2020/06/17 14:58:45 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#	ifndef MINISHELL_H
-#	define MINISHELL_H
-#	define ERROR -1
-#	define SUCCESS 0
-#	include <stdio.h>
-#	include <sys/wait.h>
-#	include <sys/types.h>
-#	include "./get_next_line.h"
-#	include "./libft.h"
+#	include "minishell.h"
 
-char	**init_env(char *envp[]);
-void	*free_split(char **splitted_str);
-char	**split_command(char *str);
+void	ft_pwd(char **argv)
+{
+	char	**argv;
+	char	path[1024];
 
-
-#	endif
+	if (getcwd(path, 1024) == NULL)
+		return ; // getcwd err
+	ft_putstr_fd(path, 1);
+}

@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/17 16:07:54 by hyekim           ###   ########.fr       */
+/*   Created: 2020/06/17 15:00:21 by hyekim            #+#    #+#             */
+/*   Updated: 2020/06/17 15:33:10 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#	ifndef MINISHELL_H
-#	define MINISHELL_H
-#	define ERROR -1
-#	define SUCCESS 0
-#	include <stdio.h>
-#	include <sys/wait.h>
-#	include <sys/types.h>
-#	include "./get_next_line.h"
-#	include "./libft.h"
+#	include "minishell.h"
 
-char	**init_env(char *envp[]);
-void	*free_split(char **splitted_str);
-char	**split_command(char *str);
+int		ft_echo(char **argv)
+{
+	int		i;
+	int		is_n_option;
 
-
-#	endif
+	i = 1;
+	is_n_option = 0;
+	if (argv[i] != NULL && ft_strncmp("-n", argv[i], 3) == 0)
+	{
+		is_n_option = 1;
+		i++;
+	}
+	while (*(argv + i) != NULL)
+	{
+		ft_putstr_fd(*(argv + i), STDOUT_FILENO);
+		i++;
+	}
+	if (is_n_option == 0)
+		write(1, "\n", 1);
+	return (SUCCESS);
+}

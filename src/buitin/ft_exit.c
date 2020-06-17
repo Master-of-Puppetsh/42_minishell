@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/17 16:07:54 by hyekim           ###   ########.fr       */
+/*   Created: 2020/06/17 15:16:43 by hyekim            #+#    #+#             */
+/*   Updated: 2020/06/17 16:08:27 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#	ifndef MINISHELL_H
-#	define MINISHELL_H
-#	define ERROR -1
-#	define SUCCESS 0
-#	include <stdio.h>
-#	include <sys/wait.h>
-#	include <sys/types.h>
-#	include "./get_next_line.h"
-#	include "./libft.h"
+#	include "minishell.h"
 
-char	**init_env(char *envp[]);
-void	*free_split(char **splitted_str);
-char	**split_command(char *str);
-
-
-#	endif
+int		ft_exit(char **argv)
+{
+	if (argv[1] && argv[2])
+		return (ERROR); // TOO MANY ARGUMENT
+	if (argv[])
+		exit()
+	return (SUCCESS);
+}
