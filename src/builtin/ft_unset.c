@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/17 15:36:32 by hjeon            ###   ########.fr       */
+/*   Created: 2020/06/17 15:29:37 by hjeon             #+#    #+#             */
+/*   Updated: 2020/06/17 15:43:15 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#	ifndef MINISHELL_H
-#	define MINISHELL_H
-#	include <stdio.h>
-#	include <sys/wait.h>
-#	include <sys/types.h>
-#	include "./get_next_line.h"
-#	include "./libft.h"
+#include "../../include/libft.h"
+#include "../../include/minishell.h"
 
-#	define ERROR -1
-#	define SUCCESS 0
+int		ft_unset(char *target)
+{
+	int		i;
+	char	*name;
+	char	*last_str;
 
-char	**init_env(char *envp[]);
-void	*free_split(char **splitted_str);
-char	**split_command(char *str);
-int		get_name(char *str);
-
-
-#	endif
+	i = -1;
+	while (__environ[++i])
+	{
+		if ((name = get_name(__environ[i])) == ERROR)
+			return (ERROR);
+		if (!ft_strncmp(name, target, ft_strlen(name)))
+		{
+			free(__environ[i]);
+			last_str = pop_string(__environ);
+			__environ[i] = last_str;
+		}
+	}
+}
