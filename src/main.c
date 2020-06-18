@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/14 15:08:57 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/06/17 16:06:54 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int			main(int argc, char *argv[], char *envp[])
 		i = 0;
 		while (*(commands + i))
 		{
-			// our_programs(paths, line);
+			//envp = builtin(line);
 			execute_excutable(paths, *(commands + i), envp);
 			i++;
 		}

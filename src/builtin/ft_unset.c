@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/12 18:21:27 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/18 15:19:12 by hjeon            ###   ########.fr       */
+/*   Created: 2020/06/17 15:29:37 by hjeon             #+#    #+#             */
+/*   Updated: 2020/06/18 15:31:02 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/libft.h"
+#include "../../include/minishell.h"
 
-void		*free_split(char **splitted_str)
+int		ft_unset(char *target, char *envp[])
 {
 	int		i;
+	char	*name;
+	char	*last_str;
 
-	i = 0;
-	while (*(splitted_str + i))
+	i = -1;
+	while (envp[++i])
 	{
-		free(*(splitted_str + i));
-		i++;
+		if (!(name = get_name(envp[i])))
+			return (ERROR);
+		if (!ft_strncmp(name, target, ft_strlen(name)))
+		{
+			last_str = pop_string(envp);
+			envp[i] = last_str;
+		}
 	}
-	free(splitted_str);
-	return (NULL);
+	return (SUCCESS);
 }
