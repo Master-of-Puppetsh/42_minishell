@@ -52,11 +52,13 @@ int			main(int argc, char *argv[], char *envp[])
 			return (0);
 		if (!(commands = split_command(line)))
 			return (1);
+		//commands의 환경변수를 value로 대치하기
 		i = 0;
 		while (*(commands + i))
 		{
 			//envp = builtin(line);
 			execute_excutable(paths, *(commands + i), envp);
+			execute_builtin(*(commands + i), envp);
 			i++;
 		}
 		free_split(commands);

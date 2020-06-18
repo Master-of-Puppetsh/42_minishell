@@ -6,12 +6,14 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/18 15:27:56 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/17 16:07:54 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #	ifndef MINISHELL_H
 #	define MINISHELL_H
+#	define ERROR -1
+#	define SUCCESS 0
 #	include <stdio.h>
 #	include <sys/wait.h>
 #	include <sys/types.h>
