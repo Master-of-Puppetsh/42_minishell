@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 18:21:27 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/18 15:19:12 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/18 21:40:31 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,10 @@ void		*free_split(char **splitted_str)
 	}
 	free(splitted_str);
 	return (NULL);
+}
+
+void		exit_with_err_msg(char *msg, int status)
+{
+	ft_putendl_fd(msg, STDERR_FILENO);
+	exit(status);
 }

@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/17 02:18:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/18 18:00:05 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/06/18 22:16:54 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #	include "minishell.h"
 
-void	ft_pwd(char **argv)
+int		ft_pwd(char **argv)
 {
 	char	path[1024];
 
 	if (getcwd(path, 1024) == NULL)
-		return ;
+		return (CMD_ERR);
 	ft_putendl_fd(path, 1);
-	return ;
+	return (SUCCESS);
 }

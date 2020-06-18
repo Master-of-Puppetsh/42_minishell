@@ -1,41 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_export.c                                        :+:      :+:    :+:   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/17 14:55:31 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/18 19:22:44 by hjeon            ###   ########.fr       */
+/*   Created: 2020/06/17 15:29:37 by hjeon             #+#    #+#             */
+/*   Updated: 2020/06/18 22:53:26 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/libft.h"
 #include "../../include/minishell.h"
 
-int		ft_export(char *str, char *envp[]) //str ex) path=123/asb/23
+int		ft_unset(char **target, char ***envp)
 {
-	int		idx;
+	int		i;
 	char	*name;
-	int		cur_size;
+	char	*last_str;
 
-	if (!(name = get_name(str)))
-		return (ERROR);
-	idx = find_env_index(name, envp);
-	if (idx == ERROR)
+	i = -1;
+	target++;
+	while (*target)
 	{
-		if((cur_size = expand_envp(&envp)) == ERROR)
+		while ((*envp)[++i])
 		{
-			free(name);
-			return (ERROR);
+			if (!(name = get_name((*envp)[i])))
+				return (ERROR);
+			printf("%s\n", name);
+			printf("%s\n", *target);
+			if (!ft_strncmp(name, *target, ft_strlen(name)))
+			{
+				last_str = pop_string(*envp);
+				(*envp)[i] = last_str;
+			}
 		}
-		insert_string(envp, cur_size, str);
+		target++;
 	}
-	else
-	{
-		free(envp[idx]);
-		insert_string(envp, idx, str);
-	}
-	free(name);
 	return (SUCCESS);
 }

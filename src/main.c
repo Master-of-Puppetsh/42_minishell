@@ -6,61 +6,39 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/17 16:06:54 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/18 22:51:29 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		execute_excutable(char **paths, char *line, char *envp[])
-{
-	char		**argv;
-	int			pid;
-	int			stat_loc;
-
-	pid = fork();
-	if (0 < pid)
-		wait(&stat_loc);
-	if (!(argv = ft_split(line, ' ')))
-		return ; // error;
-	while (*(paths))
-	{
-		if (pid == 0)
-			execve(ft_strjoin(*(paths), argv[0]), argv, envp);
-		paths++;
-	}
-	if (pid == 0)
-		exit(0);
-}
-
 int			main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
-	int		result;
 	char	**paths;
 	char	**commands;
+	int		status;
 	int		i;
+	char	**cmd_argv;
 
 	paths = init_env(envp);
-	line = NULL;
+	status = 0;
 	while (1)
 	{
 		write(STDOUT_FILENO, "$ ", 2);
-		if ((result = get_next_line(STDIN_FILENO, &line)) == -1)
-			return (1);
-		if (result == 0)
-			return (0);
+		if ((i = get_next_line(STDIN_FILENO, &line)) == -1 || i == 0)
+			return (i * -1);
 		if (!(commands = split_command(line)))
 			return (1);
-		//commands의 환경변수를 value로 대치하기
-		i = 0;
-		while (*(commands + i))
+		i = -1;
+		while (*(commands + ++i))
 		{
-			//envp = builtin(line);
-			execute_excutable(paths, *(commands + i), envp);
-			execute_builtin(*(commands + i), envp);
-			i++;
+			cmd_argv = parse_command(*(commands + i), envp, status);
+			execute_builtin(cmd_argv, &envp, &status);
+			if (status == CMD_NOT_FOUND)
+				execute_program(paths, cmd_argv, envp, &status);
 		}
 		free_split(commands);
 	}
+	return (status);
 }

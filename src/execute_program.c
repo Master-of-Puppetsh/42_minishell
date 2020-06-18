@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*   execute_program.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/17 15:29:37 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/18 15:31:02 by hjeon            ###   ########.fr       */
+/*   Created: 2020/06/18 19:57:34 by hjeon             #+#    #+#             */
+/*   Updated: 2020/06/18 22:09:42 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/libft.h"
-#include "../../include/minishell.h"
+#include "minishell.h"
 
-int		ft_unset(char *target, char *envp[])
+void		execute_program(char **paths, char **argv, char *envp[], int *status)
 {
-	int		i;
-	char	*name;
-	char	*last_str;
+	int			pid;
+	int			stat_loc;
 
-	i = -1;
-	while (envp[++i])
+	pid = fork();
+	if (pid > 0)
+		wait(&stat_loc);
+	while (*(paths))
 	{
-		if (!(name = get_name(envp[i])))
-			return (ERROR);
-		if (!ft_strncmp(name, target, ft_strlen(name)))
-		{
-			last_str = pop_string(envp);
-			envp[i] = last_str;
-		}
+		if (pid == 0)
+			execve(ft_strjoin(*(paths), argv[0]), argv, envp);
+		paths++;
 	}
-	return (SUCCESS);
+	if (pid == 0)
+		exit(0);
 }

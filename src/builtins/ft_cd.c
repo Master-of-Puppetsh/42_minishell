@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/17 01:57:58 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/17 16:13:15 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/06/18 22:54:07 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		ft_cd(char **argv)
 	int		result;
 
 	if (argv[1] && argv[2])
-		return (ERROR); // TOO MANY ARGUMENTS
+		return (CMD_ERR); // TOO MANY ARGUMENTS
 	if (argv[1] == NULL)
 		result = chdir("~");
 	else

@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 14:23:02 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/18 15:25:14 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/18 22:53:47 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int		find_env_index(char *target, char *envp[])
 	{
 		if (!(name = get_name(*(envp + i))))
 			return (ERROR);
-		if (ft_strncmp(target, name, ft_strlen(name)) == 0)
+		if (ft_strncmp(target, name, ft_strlen(name) + 1) == 0)
 		{
 			free(name);
 			return (i);
@@ -64,7 +64,6 @@ int		expand_envp(char	***envp)
 	i = -1;
 	while (*(*envp + ++i))
 		*(expanded_envp + i) = *(*envp + i);
-	// free (*envp); is not malloced?
 	*envp = expanded_envp;
 	return (i + 1);
 }
@@ -84,7 +83,27 @@ char	*pop_string(char **envp)
 	i = -1;
 	while (*(envp + ++i))
 		;
-	last_string = *(envp + i - 1);
-	*(envp + i - 1) = NULL;
+	last_string = *(envp + i);
+	*(envp + i) = NULL;
 	return (last_string);
+}
+
+char	*ft_getenv(char *name, char **envp)
+{
+	int		i;
+	int		j;
+
+	i = find_env_index(name, envp);
+	if (i == ERROR)
+		return (NULL);
+	j = -1;
+	if (i == FAIL)
+	{
+		while (*(envp[0] + ++j) != '\0')
+			;
+		return (envp[0] + j);
+	}
+	while (*(envp[i] + ++j) != '=')
+		;
+	return (envp[i] + j + 1);
 }

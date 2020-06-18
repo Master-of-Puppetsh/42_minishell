@@ -1,9 +1,9 @@
-SRCS = $(wildcard src/*.c) $(wildcard src/*/*.c)
+SRCS = $(wildcard src/*.c) $(wildcard src/*/*.c) $(wildcard src/*/*/*.c)
 OBJS = $(SRCS:.c=.o)
 NAME = minishell
 INCLUDE = include
 LIB = libft.a
-LIB_DIR = src/libft
+LIB_DIR = src/util/libft
 RM = rm -f
 CC = gcc
 CFLAGS =
