@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/17 14:55:31 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/18 15:09:01 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/18 19:22:44 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		ft_export(char *str, char *envp[]) //str ex) path=123/asb/23
 	if (!(name = get_name(str)))
 		return (ERROR);
 	idx = find_env_index(name, envp);
-	if (idx != ERROR)
+	if (idx == ERROR)
 	{
 		if((cur_size = expand_envp(&envp)) == ERROR)
 		{
