@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/17 14:50:28 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/17 15:33:39 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/18 14:16:18 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@
 #include "../../include/libft.h"
 #include "../../include/minishell.h"
 
-int		ft_env(void)
+int		ft_env(char *envp[])
 {
 	int		i;
 
 	i = 0;
-	while (*(__environ + i))
+	while (*(envp + i))
 	{
-		ft_putstr_fd(*(__environ + i), STDOUT_FILENO);
+		ft_putstr_fd(*(envp + i), STDOUT_FILENO);
 		write(STDOUT_FILENO, "\n", 1);
 		i++;
 	}
