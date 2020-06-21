@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/18 22:52:02 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/21 22:22:42 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #	include <stdio.h>
 #	include <sys/wait.h>
 #	include <sys/types.h>
+#	include <fcntl.h>
+#	include <string.h>
+#	include <errno.h>
 #	include "./get_next_line.h"
 #	include "./libft.h"
 
@@ -25,6 +28,13 @@
 #	define CMD_NOT_FOUND	127
 #	define CMD_ERR			1
 #	define ERRMSG_MALLOC	"ERROR: failed to malloc"
+
+typedef struct		s_redirection
+{
+	int				copied_std;
+	int				is_stdout;
+	int				fd;
+}					t_redirection;
 
 char	**init_env(char *envp[]);
 void	*free_split(char **splitted_str);
@@ -46,6 +56,5 @@ void	execute_builtin(char **argv, char ***envp, int *status);
 char	*ft_getenv(char *name, char **envp);
 void	exit_with_err_msg(char *msg, int status);
 char	**parse_command(char *command, char **envp, int status);
-
 
 #	endif

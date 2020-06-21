@@ -1,3 +1,4 @@
+ 
 SRCS = $(wildcard src/*.c) $(wildcard src/*/*.c) $(wildcard src/*/*/*.c)
 OBJS = $(SRCS:.c=.o)
 NAME = minishell
