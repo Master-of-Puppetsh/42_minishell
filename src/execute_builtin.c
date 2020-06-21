@@ -59,6 +59,8 @@ void	replace_env(char **arg, char **envp, int status)
 	}
 }
 
+
+
 char		**parse_command(char *command, char **envp, int status)
 {
 	char	**argv;
@@ -67,8 +69,9 @@ char		**parse_command(char *command, char **envp, int status)
 	if (!(argv = ft_split(command, ' '))) // TODO: white space
 		exit_with_err_msg(ERRMSG_MALLOC, 1);
 	i = 0;
-	while (*(argv + i)!= NULL)
+	while (*(argv + i) != NULL)
 	{
+
 		replace_env(argv + i, envp, status);
 		i++;
 	}
