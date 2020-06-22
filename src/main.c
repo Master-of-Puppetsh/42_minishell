@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/22 16:30:27 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/22 17:08:28 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,17 +146,30 @@ int			main(int argc, char *argv[], char *envp[])
 		while (*(commands + ++i))
 		{
 			cmd_argv = parse_command(*(commands + i), envp, status);
-			redirection_list = NULL;
-			if (create_redirection_list(&redirection_list, cmd_argv) == ERROR)
+			//////////////////////////////////////////////////////////////////////
+			//
+			// 1. 파이프 기호에 따라 파싱할것
+			// 2. 와일 돌기
+			// 	2-1 ??.
+			// 	2-2 ??
+			// 	2-3 커맨드 실행
+			// 2-4 ??
+			check_pipe_list();
+			while (pipe_cnt)
 			{
-				ft_putendl_fd(strerror(errno), STDERR_FILENO);
-				continue;
+				redirection_list = NULL;
+				if (create_redirection_list(&redirection_list, cmd_argv) == ERROR)
+				{
+					ft_putendl_fd(strerror(errno), STDERR_FILENO);
+					continue;
+				}
+				execute_builtin(cmd_argv, &envp, &status);
+				if (status == CMD_NOT_FOUND)
+					execute_program(paths, cmd_argv, envp, &status);
+				reset_std(redirection_list);
+				ft_lstclear(&redirection_list, &free);
 			}
-			execute_builtin(cmd_argv, &envp, &status);
-			if (status == CMD_NOT_FOUND)
-				execute_program(paths, cmd_argv, envp, &status);
-			reset_std(redirection_list);
-			ft_lstclear(&redirection_list, &free);
+			///////////////////////////////////////////////////////////////////////
 		}
 		free_split(commands);
 	}
