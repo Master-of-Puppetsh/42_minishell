@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/17 01:57:58 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/18 22:54:07 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/25 15:38:03 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,5 @@ int		ft_cd(char **argv)
 	// 	ft_putstr_fd(": ", 1);
 	// 	ft_putstr_fd(strerror(errno), 1);
 	// }
-	return (SUCCESS);
+	return (result);
 }

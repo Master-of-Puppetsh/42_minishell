@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/22 16:30:27 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/25 16:41:06 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			reset_std(t_list *list)
+void		reset_std(t_list *list)
 {
 	t_redirection	*redirection;
 
@@ -40,13 +40,14 @@ int			find_redirection_mark(char *str)
 	return (FAIL);
 }
 
-int			check_stdout(char *str)
+int		check_stdout(char *str)
 {
 	if (*str == '>')
 		return (STDOUT_FILENO);
 	else if (*str == '<')
 		return (STDIN_FILENO);
 	exit_with_err_msg("CHECK STDOUT ERR", CMD_ERR);
+	return (ERROR);
 }
 
 void		remove_tab(char **argv, int idx)
@@ -86,6 +87,7 @@ int			set_fds(t_redirection *redirection, char **cmd_argv, int arg_idx)
 		return (ERROR);
 	redirection->copied_std = dup(redirection->is_stdout);
 	dup2(redirection->fd, redirection->is_stdout);
+	return (SUCCESS);
 }
 
 int		free_redirection(t_list **begin_list, t_redirection *redirection)
@@ -121,42 +123,104 @@ int		create_redirection_list(t_list **begin_list, char **cmd_argv)
 	return (SUCCESS);
 }
 
+int		execute_command_internal(char *command, char *envp[], int status, int fds[])
+{
+	int		pid;
+	char	**cmd_argv;
+	t_list	*redirection_list;
+
+	cmd_argv = parse_command(command, envp, status);
+	redirection_list = NULL;
+	pid = 0;
+	if (create_redirection_list(&redirection_list, cmd_argv) == ERROR)
+	{
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
+		return (CMD_ERR);
+	}
+	if (redirection_list)
+	{
+		if ((pid = fork()) > 0)
+			wait(&status);
+		status = WEXITSTATUS(status);
+	}
+	if (pid == 0)
+	{
+		do_piping(fds);
+		execute_builtin(cmd_argv, &envp, &status);
+		if (status == CMD_NOT_FOUND)
+			execute_program(cmd_argv, envp, &status);
+		if (redirection_list)
+			exit(status);
+	}
+	reset_std(redirection_list);
+	ft_lstclear(&redirection_list, &free);
+	return (status);
+}
+
+int		execute_pipelines(char **pipelines, char *envp[], int status)
+{
+	int		prev;
+	int		pid;
+	int		fds[2];
+	int		temp_stdout;
+	int		temp_stdin;
+
+	prev = STDIN_FILENO;
+	temp_stdout = dup(STDOUT_FILENO);
+	temp_stdin = dup(STDIN_FILENO);
+	while (*pipelines)
+	{
+		if (*(pipelines + 1))
+			pipe(fds);
+		else
+			fds[1] = temp_stdout;
+		pid = fork();
+		if (pid == 0)
+		{
+			status = execute_command_internal(*pipelines, envp, status, (int[]){prev, fds[1]});
+			exit(status);
+		}
+		close(prev);
+		prev = fds[0];
+		close(fds[1]);
+		pipelines++;
+	}
+	waitpid(pid, &status, 0);
+	do_piping((int[]){temp_stdin, temp_stdout});
+	close(temp_stdin);
+	close(temp_stdout);
+	return (status);
+}
+
+void		do_piping(int fds[])
+{
+	dup2(fds[0], STDIN_FILENO);
+	dup2(fds[1], STDOUT_FILENO);
+}
+
 int			main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
-	char	**paths;
 	char	**commands;
 	int		status;
 	int		i;
-	char	**cmd_argv;
-	int		redirection_filename;
-	int		temp_stdout;
-	t_list	*redirection_list;
+	char	**pipelines;
 
-	paths = init_env(envp);
 	status = 0;
-	while (1)
+	while (argc == 1 && *argv)
 	{
 		write(STDOUT_FILENO, "$ ", 2);
 		if ((i = get_next_line(STDIN_FILENO, &line)) == -1 || i == 0)
 			return (i * -1);
-		if (!(commands = split_command(line)))
+		if (!(commands = split_command(line, ';')))
 			return (1);
 		i = -1;
 		while (*(commands + ++i))
 		{
-			cmd_argv = parse_command(*(commands + i), envp, status);
-			redirection_list = NULL;
-			if (create_redirection_list(&redirection_list, cmd_argv) == ERROR)
-			{
-				ft_putendl_fd(strerror(errno), STDERR_FILENO);
-				continue;
-			}
-			execute_builtin(cmd_argv, &envp, &status);
-			if (status == CMD_NOT_FOUND)
-				execute_program(paths, cmd_argv, envp, &status);
-			reset_std(redirection_list);
-			ft_lstclear(&redirection_list, &free);
+			if (*((pipelines = split_command(*(commands + i), '|')) + 1))
+				status = execute_pipelines(pipelines, envp, status);
+			else
+				status = execute_command_internal(*(commands + i), envp, status, (int[]){STDIN_FILENO, STDOUT_FILENO});
 		}
 		free_split(commands);
 	}

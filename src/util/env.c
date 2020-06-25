@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 16:21:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/12 18:07:09 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/06/25 15:16:14 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "../include/minishell.h"
 
-char	**init_env(char *envp[])
+char	**get_paths(char *envp[])
 {
 	char	**paths;
 	char	*new_path;

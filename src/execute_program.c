@@ -11,24 +11,27 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdlib.h>
 
-void		execute_program(char **paths, char **argv, char *envp[], int *status)
+void		execute_program(char **argv, char *envp[], int *status)
 {
 	int			pid;
-	int			stat_loc;
-	int			fd;
-	
-	pid = fork();
-	
-	if (pid > 0)
-		wait(&stat_loc);
-	while (*(paths))
-	{
-		if (pid == 0)
-			execve(ft_strjoin(*(paths), argv[0]), argv, envp);
-		paths++;
-	}
+	char		**paths;
 
-	if (pid == 0)
-		exit(0);
+	pid = fork();
+	paths = get_paths(envp);
+	if (pid > 0)
+	{
+		waitpid(pid, status, 0);
+		*status = WEXITSTATUS(*status);
+	}
+	else if (pid == 0)
+	{
+		while (*(paths))
+		{
+			execve(ft_strjoin(*(paths), argv[0]), argv, envp);
+			paths++;
+		}
+		exit(CMD_NOT_FOUND);
+	}
 }

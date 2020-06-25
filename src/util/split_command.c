@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/14 15:08:30 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/17 14:16:17 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/06/25 15:13:55 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	check_quote(char *str, char quote)
 	return (quote);
 }
 
-size_t	count_command(char *str)
+size_t	count_command(char *str, char target)
 {
 	int		colon_flag;
 	char	quote;
@@ -33,14 +33,14 @@ size_t	count_command(char *str)
 	while (*str != '\0')
 	{
 		quote = check_quote(str, quote);
-		if (*str != ';' && colon_flag == 1)
+		if (*str != target && colon_flag == 1)
 		{
 			count++;
 			colon_flag = 0;
 		}
-		if (*str == ';' && (quote == 0))
+		if (*str == target && (quote == 0))
 			colon_flag = 1;
-		else if (*str == ';' && (quote == 1))
+		else if (*str == target && (quote == 1))
 		{
 			colon_flag = 1;
 			quote = 0;
@@ -50,12 +50,12 @@ size_t	count_command(char *str)
 	return (count);
 }
 
-static size_t	ft_wordlen(char const *s)
+static size_t	ft_wordlen(char const *s, char target)
 {
 	size_t		count;
 
 	count = 0;
-	while (*s != '\0' && *s != ';')
+	while (*s != '\0' && *s != target)
 	{
 		count++;
 		s++;
@@ -64,17 +64,17 @@ static size_t	ft_wordlen(char const *s)
 }
 
 
-static char		*ft_commanddup(char **str)
+static char		*ft_commanddup(char **str, char target)
 {
 	char	*result;
 	char	quote;
 	size_t	i;
 
-	if (!(result = ft_calloc(sizeof(char), (ft_wordlen(*str) + 1))))
+	if (!(result = ft_calloc(sizeof(char), (ft_wordlen(*str, target) + 1))))
 		return (NULL);
 	i = 0;
 	quote = 0;
-	while ((quote || **str != ';') && **str != '\0')
+	while ((quote || **str != target) && **str != '\0')
 	{
 		if (!(quote == **str || quote == 1))
 		{
@@ -90,14 +90,14 @@ static char		*ft_commanddup(char **str)
 	return (result);
 }
 
-char	**split_command(char *str)
+char	**split_command(char *str, char target)
 {
 	char	**result;
 	int		colon_flag;
 	char	quote;
 	int		i;
 
-	if (!(result = ft_calloc(sizeof(char *), (count_command(str) + 1))))
+	if (!(result = ft_calloc(sizeof(char *), (count_command(str, target) + 1))))
 		return (NULL);
 	colon_flag = 1;
 	quote = 0;
@@ -105,15 +105,15 @@ char	**split_command(char *str)
 	while (*str != '\0')
 	{
 		quote = check_quote(str, quote);
-		if (*str != ';' && colon_flag == 1)
+		if (*str != target && colon_flag == 1)
 		{
-			if (!(result[i++] = ft_commanddup(&str)))
+			if (!(result[i++] = ft_commanddup(&str, target)))
 				return (free_split(result));
 			colon_flag = 0;
 		}
-		if (*str == ';' && (quote == 0))
+		if (*str == target && (quote == 0))
 			colon_flag = 1;
-		else if (*str == ';' && (quote == 1))
+		else if (*str == target && (quote == 1))
 		{
 			colon_flag = 1;
 			quote = 0;
