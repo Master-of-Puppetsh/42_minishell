@@ -6,11 +6,13 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/26 13:44:24 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/26 18:42:48 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int			g_pid = -1;
 
 void		reset_std(t_list *list)
 {
@@ -125,13 +127,12 @@ int		create_redirection_list(t_list **begin_list, char **cmd_argv)
 
 int		execute_command_internal(char *command, char *envp[], int status, int fds[])
 {
-	int		pid;
 	char	**cmd_argv;
 	t_list	*redirection_list;
 
 	cmd_argv = parse_command(command, envp, status);
 	redirection_list = NULL;
-	pid = 0;
+	g_pid = 0;
 	if (create_redirection_list(&redirection_list, cmd_argv) == ERROR)
 	{
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
@@ -139,11 +140,11 @@ int		execute_command_internal(char *command, char *envp[], int status, int fds[]
 	}
 	if (redirection_list)
 	{
-		if ((pid = fork()) > 0)
+		if ((g_pid = fork()) > 0)
 			wait(&status);
 		status = WEXITSTATUS(status);
 	}
-	if (pid == 0)
+	if (g_pid == 0)
 	{
 		do_piping(fds);
 		execute_builtin(cmd_argv, &envp, &status);
@@ -154,6 +155,7 @@ int		execute_command_internal(char *command, char *envp[], int status, int fds[]
 	}
 	reset_std(redirection_list);
 	ft_lstclear(&redirection_list, &free);
+	g_pid = -1;
 	return (status);
 }
 
@@ -207,11 +209,11 @@ int			main(int argc, char *argv[], char *envp[])
 	char	**pipelines;
 
 	status = 0;
+	listen_signals();
 	while (argc == 1 && *argv)
 	{
-		write(STDOUT_FILENO, "$ ", 2);
-		if ((i = get_next_line(STDIN_FILENO, &line)) == -1 || i == 0)
-			return (i * -1);
+		prompt();
+		line = read_command_line();
 		if (!(commands = split_command(line, ';')))
 			return (1);
 		i = -1;

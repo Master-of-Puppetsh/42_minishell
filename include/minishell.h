@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/25 15:38:30 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/26 18:43:25 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #	include <fcntl.h>
 #	include <string.h>
 #	include <errno.h>
-#	include "./get_next_line.h"
+#	include <signal.h>
 #	include "./libft.h"
 
 #	define SUCCESS			0
@@ -36,12 +36,12 @@ typedef struct		s_redirection
 	int				fd;
 }					t_redirection;
 
-void		do_piping(int fds[]);
+void	do_piping(int fds[]);
 char	**get_paths(char *envp[]);
 void	*free_split(char **splitted_str);
 char	**split_command(char *str, char target);
 char	*get_name(char *str);
-int		ft_cd(char **argv);
+int		ft_cd(char **argv, char *envp[]);
 int		ft_echo(char **argv);
 int		ft_exit(char **argv, int status);
 int		ft_pwd(void);
@@ -57,5 +57,8 @@ void	execute_builtin(char **argv, char ***envp, int *status);
 char	*ft_getenv(char *name, char **envp);
 void	exit_with_err_msg(char *msg, int status);
 char	**parse_command(char *command, char **envp, int status);
+void	listen_signals(void);
+char	*read_command_line(void);
+void	prompt(void);
 
 #	endif

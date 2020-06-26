@@ -83,7 +83,7 @@ void		execute_builtin(char **argv, char ***envp, int *status)
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 		*status = ft_echo(argv);
 	else if (ft_strncmp(argv[0], "cd", 3) == 0)
-		*status = ft_cd(argv);
+		*status = ft_cd(argv, *envp);
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
 		*status = ft_pwd();
 	else if (ft_strncmp(argv[0], "export", 7) == 0)

@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/14 15:08:30 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/25 15:13:55 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/26 18:45:53 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static char		*ft_commanddup(char **str, char target)
 	if (!(result = ft_calloc(sizeof(char), (ft_wordlen(*str, target) + 1))))
 		return (NULL);
 	i = 0;
-	quote = 0;
+	quote = check_quote(*str, 0);
 	while ((quote || **str != target) && **str != '\0')
 	{
 		if (!(quote == **str || quote == 1))

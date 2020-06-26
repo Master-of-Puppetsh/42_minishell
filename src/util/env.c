@@ -6,12 +6,11 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 16:21:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/25 15:16:14 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/26 17:57:55 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "../include/minishell.h"
+#include "minishell.h"
 
 char	**get_paths(char *envp[])
 {

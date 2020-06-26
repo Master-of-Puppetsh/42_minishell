@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/17 15:00:21 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/22 14:27:57 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/26 15:39:03 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ int		ft_echo(char **argv)
 
 	i = 1;
 	is_n_option = 0;
-	if (argv[i] != NULL && ft_strncmp("-n", argv[i], 3) == 0)
+	while (argv[i] != NULL && ft_strncmp("-n", argv[i], 3) == 0)
 	{
 		is_n_option = 1;
+		// printf("hi : %s\n", argv[i]);
 		i++;
 	}
 	while (*(argv + i) != NULL)

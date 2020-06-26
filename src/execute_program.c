@@ -13,19 +13,20 @@
 #include "minishell.h"
 #include <stdlib.h>
 
+extern int	g_pid;
+
 void		execute_program(char **argv, char *envp[], int *status)
 {
-	int			pid;
 	char		**paths;
 
-	pid = fork();
+	g_pid = fork();
 	paths = get_paths(envp);
-	if (pid > 0)
+	if (g_pid > 0)
 	{
-		waitpid(pid, status, 0);
+		waitpid(g_pid, status, 0);
 		*status = WEXITSTATUS(*status);
 	}
-	else if (pid == 0)
+	else if (g_pid == 0)
 	{
 		while (*(paths))
 		{
