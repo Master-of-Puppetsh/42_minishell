@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/27 19:12:30 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/27 21:56:03 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ char	**parse_command(char *command, char **envp, int status);
 void	listen_signals(void);
 char	*read_command_line(void);
 void	prompt(void);
+char	check_quote(char *str, char quote);
 
 #	endif

@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/27 19:12:30 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/27 23:18:34 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,11 @@ int		execute_command_internal(char *command, char ***envp, int status,
 		execute_builtin(cmd_argv, envp, &status);
 		if (status == CMD_NOT_FOUND)
 			execute_program(cmd_argv, *envp, &status);
+		if (status == CMD_NOT_FOUND)
+		{
+			ft_putstr_fd(cmd_argv[0], STDERR_FILENO);
+			ft_putendl_fd(": command not found", STDERR_FILENO);
+		}
 		if (redirection_list)
 			exit(status);
 	}
@@ -193,7 +198,7 @@ int		execute_pipelines(char **pipelines, char *envp[], int status)
 	do_piping((int[]){temp_stdin, temp_stdout});
 	close(temp_stdin);
 	close(temp_stdout);
-	return (status);
+	return (WEXITSTATUS(status));
 }
 
 void		do_piping(int fds[])

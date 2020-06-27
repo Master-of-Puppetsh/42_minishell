@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/17 14:55:31 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/22 14:27:57 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/27 19:36:46 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/libft.h"
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 int		ft_export(char **str, char ***envp) //str ex) path=123/asb/23
 {

@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/14 15:08:30 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/26 19:00:07 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/27 20:11:555 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,18 @@ size_t	count_command(char *str, char target)
 	return (count);
 }
 
-static size_t	ft_wordlen(char const *s, char target)
+static size_t	ft_wordlen(char *str, char target)
 {
 	size_t		count;
+	char		quote;
 
+	quote = check_quote(str, 0);
 	count = 0;
-	while (*s != '\0' && *s != target)
+	while ((quote || *str != target) && *str != '\0')
 	{
 		count++;
-		s++;
+		str++;
+		quote = check_quote(str, quote);
 	}
 	return (count);
 }
@@ -70,23 +73,22 @@ static char		*ft_commanddup(char **str, char target)
 	char	quote;
 	size_t	i;
 
-	if (!(result = ft_calloc(sizeof(char), (ft_wordlen(*str, target) + 1))))
+	if (!(result = ft_calloc(sizeof(char), (ft_wordlen(*str, target) + 2))))
 		return (NULL);
 	i = 0;
 	quote = check_quote(*str, 0);
 	while ((quote || **str != target) && **str != '\0')
 	{
-		if (!(quote == **str || quote == 1))
-		{
-			result[i] = **str;
-			i++;
-		}
+		result[i] = **str;
+		i++;
 		if (quote == 1)
 			quote = 0;
 		(*str)++;
 		quote = check_quote(*str, quote);
 	}
-	(*str)--;
+	while (**str != target && **str != '\0')
+		(*str)++;
+	// (*str)--;
 	return (result);
 }
 
@@ -110,6 +112,7 @@ char	**split_command(char *str, char target)
 			if (!(result[i++] = ft_commanddup(&str, target)))
 				return (free_split(result));
 			colon_flag = 0;
+			quote = 0;
 		}
 		if (*str == target && (quote == 0))
 			colon_flag = 1;
