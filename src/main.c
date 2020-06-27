@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/26 18:42:48 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/27 19:12:30 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,12 +125,13 @@ int		create_redirection_list(t_list **begin_list, char **cmd_argv)
 	return (SUCCESS);
 }
 
-int		execute_command_internal(char *command, char *envp[], int status, int fds[])
+int		execute_command_internal(char *command, char ***envp, int status,
+									int fds[])
 {
 	char	**cmd_argv;
 	t_list	*redirection_list;
 
-	cmd_argv = parse_command(command, envp, status);
+	cmd_argv = parse_command(command, *envp, status);
 	redirection_list = NULL;
 	g_pid = 0;
 	if (create_redirection_list(&redirection_list, cmd_argv) == ERROR)
@@ -147,9 +148,9 @@ int		execute_command_internal(char *command, char *envp[], int status, int fds[]
 	if (g_pid == 0)
 	{
 		do_piping(fds);
-		execute_builtin(cmd_argv, &envp, &status);
+		execute_builtin(cmd_argv, envp, &status);
 		if (status == CMD_NOT_FOUND)
-			execute_program(cmd_argv, envp, &status);
+			execute_program(cmd_argv, *envp, &status);
 		if (redirection_list)
 			exit(status);
 	}
@@ -179,7 +180,8 @@ int		execute_pipelines(char **pipelines, char *envp[], int status)
 		pid = fork();
 		if (pid == 0)
 		{
-			status = execute_command_internal(*pipelines, envp, status, (int[]){prev, fds[1]});
+			status = execute_command_internal(*pipelines, &envp, status,
+											(int[]){prev, fds[1]});
 			exit(status);
 		}
 		close(prev);
@@ -222,7 +224,8 @@ int			main(int argc, char *argv[], char *envp[])
 			if (*((pipelines = split_command(*(commands + i), '|')) + 1))
 				status = execute_pipelines(pipelines, envp, status);
 			else
-				status = execute_command_internal(*(commands + i), envp, status, (int[]){STDIN_FILENO, STDOUT_FILENO});
+				status = execute_command_internal(*(commands + i), &envp, status,
+										(int[]){STDIN_FILENO, STDOUT_FILENO});
 		}
 		free_split(commands);
 	}
