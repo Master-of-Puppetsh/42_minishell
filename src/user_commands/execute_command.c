@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 20:25:19 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/28 21:01:36 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/28 22:15:56 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int		do_execute_command_internal(char **cmd_argv, char **envp,
 	int		status;
 
 	status = 0;
-	do_piping(fds);
+	if (!redirection_list)
+		do_piping(fds);
 	execute_builtin(cmd_argv, &envp, &status);
 	if (status == CMD_NOT_FOUND)
 		execute_program(cmd_argv, envp, &status);
