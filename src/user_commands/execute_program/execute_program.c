@@ -15,7 +15,7 @@
 
 extern int	g_pid;
 
-void		execute_program(char **argv, char *envp[], int *status)
+void		execute_program(char **argv, char **envp, int *status)
 {
 	char		**paths;
 	char		*joined_path;
@@ -34,11 +34,10 @@ void		execute_program(char **argv, char *envp[], int *status)
 		i = 0;
 		while (*(paths + i))
 		{
-			if (!(joined_path = ft_strjoin(*(paths + i), argv[0])))
+			if (!(joined_path = ft_strjoin(*(paths + i++), argv[0])))
 				exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
 			execve(joined_path, argv, envp);
 			free(joined_path);
-			i++;
 		}
 		exit(CMD_NOT_FOUND);
 	}

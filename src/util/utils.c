@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 18:21:27 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/27 19:12:30 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/28 21:19:43 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,24 @@ void		exit_with_err_msg(char *msg, int status)
 
 void	prompt(void)
 {
-	write(STDERR_FILENO, "$ ", 2);
+	write(STDERR_FILENO, "\n", 1);
+	ft_putstr_fd("\033[0;36m", STDERR_FILENO);
+ 	write(STDERR_FILENO, "\e[1m", 4);
+	ft_pwd(STDERR_FILENO);
+	ft_putstr_fd("\033[0m", STDERR_FILENO);
+	write(STDERR_FILENO, "> ", 2);
+}
+
+void		remove_tab(char **argv, int idx)
+{
+	int		i;
+
+	free(argv[idx]);
+	i = 1;
+	while (*(argv + idx + i))
+	{
+		argv[idx + i - 1] = argv[idx + i];
+		i++;
+	}
+	argv[idx + i - 1] = NULL;
 }

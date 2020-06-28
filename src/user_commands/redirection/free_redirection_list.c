@@ -1,41 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_signal.c                                        :+:      :+:    :+:   */
+/*   free_redirection_list.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/26 14:35:31 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/28 21:23:55 by hjeon            ###   ########.fr       */
+/*   Created: 2020/06/28 20:57:20 by hjeon             #+#    #+#             */
+/*   Updated: 2020/06/28 20:58:54 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #	include "minishell.h"
 
-extern int g_pid;
-
-void	handle_sigint(int signum)
+void		reset_std(t_list *list)
 {
-	if (g_pid > 0)
-		kill(g_pid, SIGTERM);
-	write(STDERR_FILENO, "\n", 1);
-	if (g_pid == -1)
-		prompt();
-	(void)signum;
-}
+	t_redirection	*redirection;
 
-void			handle_sigquit(int signum)
-{
-	if (g_pid > 0)
+	while (list)
 	{
-		kill(g_pid, SIGABRT);
-		write(STDERR_FILENO, "Quit\n", 5);
+		redirection = list->content;
+		dup2(redirection->copied_std, redirection->is_stdout);
+		close(redirection->fd);
+		close(redirection->copied_std);
+		list = list->next;
 	}
-	(void)signum;
 }
 
-void			listen_signals(void)
+int		free_redirection(t_list **begin_list, t_redirection *redirection)
 {
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
+	reset_std(*begin_list);
+	free(redirection);
+	return (ERROR);
 }

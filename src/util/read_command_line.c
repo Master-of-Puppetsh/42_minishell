@@ -33,14 +33,14 @@ static char		*cat_buff(char c, char *buff)
 }
 
 
-char	*read_command_line(void)
+char	*read_command_line(int status)
 {
 	int		read_bytes;
 	char	*buff;
 	char	c;
 
 	if (!(buff = ft_strdup("")))
-		exit(0); // TODO
+		exit(CMD_ERR); // TODO
 	while (1)
 	{
 		read_bytes = read(STDIN_FILENO, &c, 1);
@@ -49,7 +49,7 @@ char	*read_command_line(void)
 			if (*buff)
 				continue ;
 			else
-				exit(0); // 확정은아님
+				exit(status);
 		}
 		if (c == '\n')
 			return (buff);

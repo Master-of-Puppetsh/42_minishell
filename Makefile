@@ -1,5 +1,5 @@
 
-SRCS = $(wildcard src/*.c) $(wildcard src/*/*.c) $(wildcard src/*/*/*.c)
+SRCS = $(wildcard src/*.c) $(wildcard src/*/*.c) $(wildcard src/*/*/*.c) $(wildcard src/*/*/*/*.c)
 OBJS = $(SRCS:.c=.o)
 NAME = minishell
 INCLUDE = include

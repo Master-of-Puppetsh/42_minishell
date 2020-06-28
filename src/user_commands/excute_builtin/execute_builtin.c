@@ -41,12 +41,38 @@ int		is_in_charset(char c, char *str)
 	return (0);
 }
 
-void	replace_env(char **arg, char **envp, int status)
+int		replace_question_to_status(int status, int i, char **arg)
 {
-	int		i;
+	char	*value;
+
+	if (!(value = ft_itoa(status)))
+		exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
+	*arg = replace_text(*arg, i, 1, value);
+	free(value);
+	return (ft_strlen(value) - 2);
+}
+
+int		do_replace_env(int i, char **arg, char **envp)
+{
 	int		j;
 	char	*name;
 	char	*value;
+
+	j = 0;
+	while (!(*(*arg + i + j) == '\0')
+			&& !is_in_charset(*(*arg + i + j), "\'\"$ "))
+		j++;
+	if (!(name = ft_substr((*arg + i), 0, j)))
+		exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
+	value = ft_getenv(name, envp);
+	free(name);
+	*arg = replace_text(*arg, i, j, value);
+	return (ft_strlen(value) - 2);
+}
+
+void	replace_env(char **arg, char **envp, int status)
+{
+	int		i;
 	char	quote;
 
 	i = -1;
@@ -54,27 +80,15 @@ void	replace_env(char **arg, char **envp, int status)
 	while (*(*arg + ++i) != '\0')
 	{
 		quote = check_quote((*arg + i), quote);
-		if (*(*arg + i) == '$' && *(*arg + i + 1) != '\0' && (quote == '\"' || quote == 0))
+		if (*(*arg + i) == '$' && *(*arg + i + 1) != '\0'
+						 && (quote == '\"' || quote == 0))
 		{
 			if (*(*arg + ++i) == '?')
 			{
-				if (!(value = ft_itoa(status)))
-					exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
-				*arg = replace_text(*arg, i, 1, value);
-				i += ft_strlen(value) - 2;
-				free(value);
+				i += replace_question_to_status(status, i , arg);
 				continue ;
 			}
-			j = 0;
-			while (!(*(*arg + i + j) == '\0') && !is_in_charset(*(*arg + i + j), "\'\"$ "))
-				j++;
-			if (!(name = ft_substr((*arg + i), 0, j)))
-				exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
-			value = ft_getenv(name, envp);
-			free(name);
-			*arg = replace_text(*arg, i, j, value);
-			i += ft_strlen(value) - 2;
-			printf("idx: %d\n", i);
+			i += do_replace_env(i, arg, envp);
 		}
 		if (quote == 1)
 			quote = 0;
@@ -124,7 +138,7 @@ void		execute_builtin(char **argv, char ***envp, int *status)
 	else if (ft_strncmp(argv[0], "cd", 3) == 0)
 		*status = ft_cd(argv, *envp);
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
-		*status = ft_pwd();
+		*status = ft_pwd(STDOUT_FILENO);
 	else if (ft_strncmp(argv[0], "export", 7) == 0)
 		*status = ft_export(argv, envp);
 	else if (ft_strncmp(argv[0], "unset", 6) == 0)
