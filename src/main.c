@@ -6,13 +6,14 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/27 23:18:34 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/28 20:15:04 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int			g_pid = -1;
+
 
 void		reset_std(t_list *list)
 {
@@ -162,6 +163,7 @@ int		execute_command_internal(char *command, char ***envp, int status,
 	reset_std(redirection_list);
 	ft_lstclear(&redirection_list, &free);
 	g_pid = -1;
+	free_split(cmd_argv);
 	return (status);
 }
 
@@ -223,6 +225,7 @@ int			main(int argc, char *argv[], char *envp[])
 		line = read_command_line();
 		if (!(commands = split_command(line, ';')))
 			return (1);
+		free(line);
 		i = -1;
 		while (*(commands + ++i))
 		{
@@ -231,6 +234,7 @@ int			main(int argc, char *argv[], char *envp[])
 			else
 				status = execute_command_internal(*(commands + i), &envp, status,
 										(int[]){STDIN_FILENO, STDOUT_FILENO});
+			free_split(pipelines);
 		}
 		free_split(commands);
 	}

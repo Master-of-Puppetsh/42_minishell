@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 16:21:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/26 19:00:05 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/28 20:04:13 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ char	**get_paths(char *envp[])
 	i = 0;
 	while (*envp != NULL)
 	{
-		if (!ft_strncmp(*envp, "PATH", 4))
+		if (!ft_strncmp(*envp, "PATH=", 5))
 		{
 			if (!(paths = ft_split(*(envp) + 5, ':')))
-				return (NULL);
+				exit_with_err_msg(ERRMSG_MALLOC, 1);
 			while (*(paths + i))
 			{
 				if (!(new_path = ft_strjoin(*(paths + i), "/")))
-					return (NULL);
+					exit_with_err_msg(ERRMSG_MALLOC, 1);
 				free(*(paths + i));
 				*(paths + i) = new_path;
 				i++;
@@ -37,5 +37,6 @@ char	**get_paths(char *envp[])
 		}
 		envp++;
 	}
+	// paths를 지운다면?
 	return (NULL);
 }

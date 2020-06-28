@@ -19,7 +19,7 @@ static char		*cat_buff(char c, char *buff)
 	int		i;
 
 	buff_len = ft_strlen(buff);
-	if (!(result = malloc(sizeof(char) * (buff_len + 2))))
+	if (!(result = ft_calloc(sizeof(char), (buff_len + 2))))
 		return (NULL);
 	i = 0;
 	while (i < buff_len)
@@ -27,8 +27,7 @@ static char		*cat_buff(char c, char *buff)
 		result[i] = buff[i];
 		i++;
 	}
-	result[i++] = c;
-	result[i] = '\0';
+	result[i] = c;
 	free(buff);
 	return (result);
 }
@@ -45,8 +44,6 @@ char	*read_command_line(void)
 	while (1)
 	{
 		read_bytes = read(STDIN_FILENO, &c, 1);
-		// write(STDOUT_FILENO, ft_itoa(c), 3);
-		// write(STDOUT_FILENO, "\n", 1);
 		if (read_bytes == 0)
 		{
 			if (*buff)

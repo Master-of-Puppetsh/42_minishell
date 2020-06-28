@@ -121,7 +121,8 @@ char	**split_command(char *str, char target)
 			colon_flag = 1;
 			quote = 0;
 		}
-		str++;
+		if (*str != '\0')
+			str++;
 	}
 	return (result);
 }

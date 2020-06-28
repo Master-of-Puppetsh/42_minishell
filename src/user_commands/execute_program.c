@@ -18,9 +18,12 @@ extern int	g_pid;
 void		execute_program(char **argv, char *envp[], int *status)
 {
 	char		**paths;
+	char		*joined_path;
+	int			i;
 
+	if (!(paths = get_paths(envp)))
+		return ;
 	g_pid = fork();
-	paths = get_paths(envp);
 	if (g_pid > 0)
 	{
 		waitpid(g_pid, status, 0);
@@ -28,11 +31,16 @@ void		execute_program(char **argv, char *envp[], int *status)
 	}
 	else if (g_pid == 0)
 	{
-		while (*(paths))
+		i = 0;
+		while (*(paths + i))
 		{
-			execve(ft_strjoin(*(paths), argv[0]), argv, envp);
-			paths++;
+			if (!(joined_path = ft_strjoin(*(paths + i), argv[0])))
+				exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
+			execve(joined_path, argv, envp);
+			free(joined_path);
+			i++;
 		}
 		exit(CMD_NOT_FOUND);
 	}
+	free_split(paths);
 }
