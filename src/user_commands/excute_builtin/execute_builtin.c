@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 20:16:26 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/29 16:04:39 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 17:23:25 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void		print_error(char *builtin_name, char *arg, char *errmsg)
+void		print_error(char *command, char *arg, char *errmsg)
 {
-	ft_putstr_fd(builtin_name, STDERR_FILENO);
+	ft_putstr_fd(command, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	if (arg)
 	{
 		ft_putstr_fd(arg, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 	}
-	if (*errmsg)
+	if (errmsg)
 		ft_putendl_fd(errmsg, STDERR_FILENO);
 	else
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);

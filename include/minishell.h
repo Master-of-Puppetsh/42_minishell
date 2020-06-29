@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/29 16:30:51 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 17:16:51 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,6 @@ int				free_redirection(t_list **begin_list,
 int				is_in_charset(char c, char *str);
 char			*replace_text(char *dest, int start, int length, char *src);
 int				do_replace_env(int i, char **arg, char **envp);
-void			print_error(char *builtin_name, char *arg, char *errmsg);
+void			print_error(char *command, char *arg, char *errmsg);
 int				replace_question_to_status(int status, int i, char **arg);
 #	endif

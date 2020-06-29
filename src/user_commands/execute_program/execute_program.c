@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 19:57:34 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/29 16:04:18 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 16:54:03 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ void		execute_program(char **argv, char **envp, int *status)
 
 	if (!(paths = get_paths(envp)))
 		return ;
-	g_pid = fork();
-	if (g_pid > 0)
+	if ((g_pid = fork()) > 0)
 	{
 		waitpid(g_pid, status, 0);
 		*status = WEXITSTATUS(*status);
@@ -34,6 +33,7 @@ void		execute_program(char **argv, char **envp, int *status)
 		i = 0;
 		while (*(paths + i))
 		{
+			execve(argv[0], argv, envp);
 			if (!(joined_path = ft_strjoin(*(paths + i++), argv[0])))
 				exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
 			execve(joined_path, argv, envp);

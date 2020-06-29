@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 14:35:31 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/29 16:02:56 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 17:05:28 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		handle_sigquit(int signum)
 	if (g_pid > 0)
 	{
 		kill(g_pid, SIGABRT);
-		write(STDERR_FILENO, "Quit\n", 5);
+		write(STDERR_FILENO, "Quit: 3\n", 8);
 	}
 	(void)signum;
 }

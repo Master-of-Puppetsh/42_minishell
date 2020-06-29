@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 20:25:19 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/29 15:30:33 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 17:20:50 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ int		do_execute_command_internal(char **cmd_argv, char **envp,
 		execute_program(cmd_argv, envp, &status);
 	if (status == CMD_NOT_FOUND)
 	{
-		ft_putstr_fd(cmd_argv[0], STDERR_FILENO);
-		ft_putendl_fd(": command not found", STDERR_FILENO);
+		if (is_in_charset('/', cmd_argv[0]))
+			print_error(cmd_argv[0], NULL, "No such file or directory");
+		else
+			print_error(cmd_argv[0], NULL, "command not found");
 	}
 	if (redirection_list)
 		exit(status);

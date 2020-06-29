@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 03:32:38 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/29 16:26:16 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 17:03:06 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ char		*read_command_line(int status)
 			if (*buff)
 				continue ;
 			else
+			{
+				ft_putendl_fd("exit", STDERR_FILENO);
 				exit(status);
+			}
 		}
 		if (c == '\n')
 			return (buff);
