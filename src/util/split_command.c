@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/14 15:08:30 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/29 16:27:54 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 16:36:20 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*ft_commanddup(char **str, char target)
 void	set_flags(char *str, char *quote, char target, int *target_flag)
 {
 	if (*str == target && (*quote == 0))
-		target_flag = 1;
+		*target_flag = 1;
 	else if (*str == target && (*quote == 1))
 	{
 		*target_flag = 1;

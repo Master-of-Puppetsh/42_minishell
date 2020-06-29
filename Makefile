@@ -23,7 +23,6 @@ clean:
 $(NAME):	$(OBJS) $(LIB)
 			cp $(LIB_DIR)/$(LIB) $(NAME)
 			$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
-			make clean
 
 fclean:		clean
 			make -C $(LIB_DIR) fclean
