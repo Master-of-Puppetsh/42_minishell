@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 20:49:56 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/28 21:59:42 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 16:05:20 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#	include "minishell.h"
+#include "minishell.h"
 
 void		do_piping(int fds[])
 {
@@ -18,7 +18,7 @@ void		do_piping(int fds[])
 	dup2(fds[1], STDOUT_FILENO);
 }
 
-int	execute_pipeline(char **pipelines, char *envp[],
+int			execute_pipeline(char **pipelines, char *envp[],
 							int *prev, int temp_stdout)
 {
 	int		fds[2];
@@ -43,7 +43,7 @@ int	execute_pipeline(char **pipelines, char *envp[],
 	return (pid);
 }
 
-int		execute_pipelines(char **pipelines, char *envp[], int status)
+int			execute_pipelines(char **pipelines, char *envp[], int status)
 {
 	int		prev;
 	int		pid;

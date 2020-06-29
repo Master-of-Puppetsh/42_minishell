@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   read_command_line.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyekim <hyekim@student.42.fr>                 +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 03:32:38 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/26 17:27:37 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/06/29 16:26:16 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #	include "minishell.h"
 
-static char		*cat_buff(char c, char *buff)
+char		*cat_buff(char c, char *buff)
 {
 	char	*result;
 	int		buff_len;
@@ -32,15 +32,14 @@ static char		*cat_buff(char c, char *buff)
 	return (result);
 }
 
-
-char	*read_command_line(int status)
+char		*read_command_line(int status)
 {
 	int		read_bytes;
 	char	*buff;
 	char	c;
 
 	if (!(buff = ft_strdup("")))
-		exit(CMD_ERR); // TODO
+		exit(CMD_ERR);
 	while (1)
 	{
 		read_bytes = read(STDIN_FILENO, &c, 1);

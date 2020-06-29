@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_redirection_list.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 20:57:20 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/28 20:58:54 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 16:05:02 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void		reset_std(t_list *list)
 	}
 }
 
-int		free_redirection(t_list **begin_list, t_redirection *redirection)
+int			free_redirection(t_list **begin_list, t_redirection *redirection)
 {
 	reset_std(*begin_list);
 	free(redirection);

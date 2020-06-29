@@ -6,129 +6,25 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 20:16:26 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/18 21:2317 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 16:04:39 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include "../include/libft.h"
 
-char	*replace_text(char *dest, int start, int length, char *src)
+void		print_error(char *builtin_name, char *arg, char *errmsg)
 {
-	char	*result;
-	int		total_len;
-
-	if (dest == NULL)
-		exit_with_err_msg(ERRMSG_MALLOC, 1);
-	total_len = ft_strlen(src) + ft_strlen(dest) - length + 1;
-	if (!(result = ft_calloc(total_len, sizeof(char))))
-		exit_with_err_msg(ERRMSG_MALLOC, 1);
-	ft_strlcat(result, dest, start);
-	ft_strlcat(result, src, start + ft_strlen(src));
-	ft_strlcat(result, dest + start + length, total_len);
-	free(dest);
-	return (result);
-}
-
-int		is_in_charset(char c, char *str)
-{
-	while (*str != '\0')
+	ft_putstr_fd(builtin_name, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	if (arg)
 	{
-		if (c == *str)
-			return (1);
-		str++;
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
 	}
-	return (0);
-}
-
-int		replace_question_to_status(int status, int i, char **arg)
-{
-	char	*value;
-
-	if (!(value = ft_itoa(status)))
-		exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
-	*arg = replace_text(*arg, i, 1, value);
-	free(value);
-	return (ft_strlen(value) - 2);
-}
-
-int		do_replace_env(int i, char **arg, char **envp)
-{
-	int		j;
-	char	*name;
-	char	*value;
-
-	j = 0;
-	while (!(*(*arg + i + j) == '\0')
-			&& !is_in_charset(*(*arg + i + j), "\'\"$ "))
-		j++;
-	if (!(name = ft_substr((*arg + i), 0, j)))
-		exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
-	value = ft_getenv(name, envp);
-	free(name);
-	*arg = replace_text(*arg, i, j, value);
-	return (ft_strlen(value) - 2);
-}
-
-void	replace_env(char **arg, char **envp, int status)
-{
-	int		i;
-	char	quote;
-
-	i = -1;
-	quote = 0;
-	while (*(*arg + ++i) != '\0')
-	{
-		quote = check_quote((*arg + i), quote);
-		if (*(*arg + i) == '$' && *(*arg + i + 1) != '\0'
-						 && (quote == '\"' || quote == 0))
-		{
-			if (*(*arg + ++i) == '?')
-			{
-				i += replace_question_to_status(status, i , arg);
-				continue ;
-			}
-			i += do_replace_env(i, arg, envp);
-		}
-		if (quote == 1)
-			quote = 0;
-	}
-}
-
-void		remove_quotes(char *str)
-{
-	char	quote;
-
-	quote = 0;
-	while (*str != '\0')
-	{
-		quote = check_quote(str, quote);
-		if ((*str == '\'' || *str == '\"') && (quote == *str || quote == 1))
-		{
-			ft_memmove(str, str + 1, ft_strlen(str + 1) + 1);
-			str--;
-		}
-		if (quote == 1)
-			quote = 0;
-		str++;
-	}
-}
-
-char		**parse_command(char *command, char **envp, int status)
-{
-	char	**argv;
-	int		i;
-
-	if (!(argv = split_command(command, ' '))) // TODO: white space
-		exit_with_err_msg(ERRMSG_MALLOC, 1);
-	i = 0;
-	while (*(argv + i) != NULL)
-	{
-		replace_env(argv + i, envp, status);
-		remove_quotes(*(argv + i));
-		i++;
-	}
-	return (argv);
+	if (*errmsg)
+		ft_putendl_fd(errmsg, STDERR_FILENO);
+	else
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 }
 
 void		execute_builtin(char **argv, char ***envp, int *status)

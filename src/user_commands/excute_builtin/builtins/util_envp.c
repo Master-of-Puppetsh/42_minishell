@@ -3,32 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   util_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 14:23:02 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/27 19:36:37 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 16:07:25 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*get_name(char *str)
-{
-	int		i;
-	char	*ret;
-
-	i = -1;
-	while (*(str + ++i))
-	{
-		if (*(str + i) == '=')
-		{
-			if (!(ret = ft_substr(str, 0, i)))
-				return (NULL);
-			return (ret);
-		}
-	}
-	return (NULL);
-}
 
 int		find_env_index(char *target, char *envp[])
 {
@@ -50,7 +32,7 @@ int		find_env_index(char *target, char *envp[])
 	return (FAIL);
 }
 
-int		expand_envp(char	***envp)
+int		expand_envp(char ***envp)
 {
 	char	**expanded_envp;
 	int		i;
@@ -67,7 +49,7 @@ int		expand_envp(char	***envp)
 	return (i + 1);
 }
 
-int		insert_string(char **envp, int	idx, char *str)
+int		insert_string(char **envp, int idx, char *str)
 {
 	if (!(envp[idx] = ft_strdup(str)))
 		return (ERROR);

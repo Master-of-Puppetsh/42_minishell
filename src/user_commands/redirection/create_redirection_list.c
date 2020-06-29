@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   create_redirection_list.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 20:48:39 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/28 20:58:48 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/29 16:28:19 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			find_redirection_mark(char *str)
+int		find_redirection_mark(char *str)
 {
 	int			i;
 
@@ -36,8 +36,7 @@ int		check_stdout(char *str)
 	return (ERROR);
 }
 
-
-int			set_fds(t_redirection *redirection, char **cmd_argv, int arg_idx)
+int		set_fds(t_redirection *redirection, char **cmd_argv, int arg_idx)
 {
 	int		is_append;
 	int		mark_idx;
@@ -63,7 +62,6 @@ int			set_fds(t_redirection *redirection, char **cmd_argv, int arg_idx)
 	return (SUCCESS);
 }
 
-
 int		create_redirection_list(t_list **begin_list, char **cmd_argv)
 {
 	t_redirection	*redirection;
@@ -85,7 +83,7 @@ int		create_redirection_list(t_list **begin_list, char **cmd_argv)
 		ft_lstadd_front(begin_list, new_list);
 		cmd_argv[i][j] = '\0';
 		if (cmd_argv[i][0] == '\0')
-			remove_tab(cmd_argv, i);
+			remove_tab(cmd_argv, i--);
 	}
 	return (SUCCESS);
 }
