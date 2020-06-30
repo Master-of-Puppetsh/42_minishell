@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/30 20:53:24 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/30 21:09:32 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int			main(int argc, char *argv[], char *envp[])
 		if (!(commands = split_command(line, ';')))
 			return (1);
 		free(line);
-		ft_putendl_fd("hello", STDOUT_FILENO);
 		i = 0;
 		while (*(commands + i))
 			status = execute_command(*(commands + i++), &envp, status);

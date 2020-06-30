@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 20:25:19 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/30 21:02:51 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/30 21:11:51 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void		remove_escapes(char *str)
 	char	quote;
 
 	i = 0;
+	quote = 0;
 	while (str[i] != '\0')
 	{
 		quote = check_quote_passing_escape(str, quote, i);

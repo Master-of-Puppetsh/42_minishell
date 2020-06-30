@@ -19,7 +19,9 @@ src/util/env.c \
 src/util/parse_command.c \
 src/util/read_command_line.c \
 src/util/split_command.c \
-src/util/utils.c
+src/util/utils.c \
+src/util/check_quote.c
+
 OBJS = $(SRCS:.c=.o)
 NAME = minishell
 INCLUDE = include
@@ -33,13 +35,13 @@ CFLAGS = -Wall -Werror -Wextra
 			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I $(INCLUDE)
 all:		$(NAME)
 
-$(LIB):
-			make -C $(LIB_DIR) bonus
+$(LIB_DIR)/$(LIB):
+			make -C $(LIB_DIR)
 clean:
 			make -C $(LIB_DIR) clean
 			$(RM) $(OBJS)
 
-$(NAME):	$(OBJS) $(LIB)
+$(NAME):	$(OBJS) $(LIB_DIR)/$(LIB)
 			$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB_DIR)/$(LIB)
 
 fclean:		clean
