@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/14 15:08:30 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/29 16:36:20 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/30 21:01:24 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,27 @@ size_t	count_command(char *str, char target)
 {
 	int		target_flag;
 	char	quote;
-	size_t	count;
+	int		count;
+	int		i;
 
-	quote = 0;
-	count = 0;
+	init_3vars_to_zero(&quote, &count, &i);
 	target_flag = 1;
-	while (*str != '\0')
+	while (str[i] != '\0')
 	{
-		quote = check_quote(str, quote);
-		if (*str != target && target_flag == 1)
+		quote = check_quote(str, quote, i);
+		if (str[i] != target && target_flag == 1)
 		{
 			count++;
 			target_flag = 0;
 		}
-		if (*str == target && (quote == 0))
+		if (str[i] == target && (quote == 0))
 			target_flag = 1;
-		else if (*str == target && (quote == 1))
+		else if (str[i] == target && (quote == 1))
 		{
 			target_flag = 1;
 			quote = 0;
 		}
-		str++;
+		i++;
 	}
 	return (count);
 }
@@ -45,39 +45,41 @@ size_t	ft_wordlen(char *str, char target)
 {
 	size_t		count;
 	char		quote;
+	int			i;
 
-	quote = check_quote(str, 0);
+	i = 0;
+	quote = check_quote(str, 0, i);
 	count = 0;
-	while ((quote || *str != target) && *str != '\0')
+	while ((quote || str[i] != target) && str[i] != '\0')
 	{
 		count++;
-		str++;
-		quote = check_quote(str, quote);
+		i++;
+		quote = check_quote(str, quote, i);
 	}
 	return (count);
 }
 
-char	*ft_commanddup(char **str, char target)
+char	*ft_commanddup(char *str, char target, int *i)
 {
 	char	*result;
 	char	quote;
-	size_t	i;
+	int		j;
 
-	if (!(result = ft_calloc(sizeof(char), (ft_wordlen(*str, target) + 2))))
+	if (!(result = ft_calloc(sizeof(char), (ft_wordlen(str + *i, target) + 2))))
 		return (NULL);
-	i = 0;
-	quote = check_quote(*str, 0);
-	while ((quote || **str != target) && **str != '\0')
+	j = 0;
+	quote = check_quote(str, 0, *i);
+	while ((quote || str[*i] != target) && str[*i] != '\0')
 	{
-		result[i] = **str;
-		i++;
+		result[j] = str[*i];
+		j++;
 		if (quote == 1)
 			quote = 0;
-		(*str)++;
-		quote = check_quote(*str, quote);
+		(*i)++;
+		quote = check_quote(str, quote, *i);
 	}
-	while (**str != target && **str != '\0')
-		(*str)++;
+	while (str[*i] != target && str[*i] != '\0')
+		(*i)++;
 	return (result);
 }
 
@@ -99,25 +101,25 @@ char	**split_command(char *str, char target)
 	int		target_flag;
 	char	quote;
 	int		i;
+	int		j;
 
 	if (!(result = ft_calloc(sizeof(char *), (count_command(str, target) + 1))))
 		return (NULL);
 	target_flag = 1;
-	quote = 0;
-	i = 0;
-	while (*str != '\0')
+	init_3vars_to_zero(&quote, &i, &j);
+	while (str[j] != '\0')
 	{
-		quote = check_quote(str, quote);
-		if (*str != target && target_flag == 1)
+		quote = check_quote(str, quote, j);
+		if (str[j] != target && target_flag == 1)
 		{
-			if (!(result[i++] = ft_commanddup(&str, target)))
+			if (!(result[i++] = ft_commanddup(str, target, &j)))
 				return (free_split(result));
 			target_flag = 0;
 			quote = 0;
 		}
-		set_flags(str, &quote, target, &target_flag);
-		if (*str != '\0')
-			str++;
+		set_flags(str + j, &quote, target, &target_flag);
+		if (str[j] != '\0')
+			j++;
 	}
 	return (result);
 }

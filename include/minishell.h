@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/29 17:16:51 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/06/30 21:00:14 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char			**parse_command(char *command, char **envp, int status);
 void			listen_signals(void);
 char			*read_command_line(int status);
 void			prompt(void);
-char			check_quote(char *str, char quote);
+char			check_quote(char *str, char quote, int idx);
 int				execute_command(char *command, char ***envp, int status);
 int				execute_command_internal(char *command, char ***envp,
 											int status, int fds[]);
@@ -76,4 +76,9 @@ char			*replace_text(char *dest, int start, int length, char *src);
 int				do_replace_env(int i, char **arg, char **envp);
 void			print_error(char *command, char *arg, char *errmsg);
 int				replace_question_to_status(int status, int i, char **arg);
+int				is_escape(int idx, char quote, char *str);
+char			check_quote_passing_escape(char *str, char quote, int idx);
+void			init_3vars_to_zero(char *var1, int *var2, int *var3);
+
+
 #	endif

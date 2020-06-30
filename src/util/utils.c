@@ -6,19 +6,17 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 18:21:27 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/29 16:26:39 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/30 21:01:42 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char		check_quote(char *str, char quote)
+void		init_3vars_to_zero(char *var1, int *var2, int *var3)
 {
-	if ((*str == '\'' || *str == '\"') && ((quote == 0)))
-		quote = *str;
-	else if ((*str == '\'' || *str == '\"') && (quote == *str))
-		quote = 1;
-	return (quote);
+	*var1 = 0;
+	*var2 = 0;
+	*var3 = 0;
 }
 
 void		*free_split(char **splitted_str)

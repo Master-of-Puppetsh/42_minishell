@@ -6,11 +6,24 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/29 15:22:44 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/29 16:25:23 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/06/30 21:01:32 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int			is_escape(int idx, char quote, char *str)
+{
+	int		is_escape;
+
+	is_escape = 0;
+	while (quote != '\'' && idx > 0 && str[idx - 1] == '\\')
+	{
+		is_escape = !is_escape;
+		idx--;
+	}
+	return (is_escape);
+}
 
 char		*replace_text(char *dest, int start, int length, char *src)
 {
@@ -29,25 +42,6 @@ char		*replace_text(char *dest, int start, int length, char *src)
 	return (result);
 }
 
-void		remove_quotes(char *str)
-{
-	char	quote;
-
-	quote = 0;
-	while (*str != '\0')
-	{
-		quote = check_quote(str, quote);
-		if ((*str == '\'' || *str == '\"') && (quote == *str || quote == 1))
-		{
-			ft_memmove(str, str + 1, ft_strlen(str + 1) + 1);
-			str--;
-		}
-		if (quote == 1)
-			quote = 0;
-		str++;
-	}
-}
-
 void		replace_env(char **arg, char **envp, int status)
 {
 	int		i;
@@ -57,9 +51,9 @@ void		replace_env(char **arg, char **envp, int status)
 	quote = 0;
 	while (*(*arg + ++i) != '\0')
 	{
-		quote = check_quote((*arg + i), quote);
+		quote = check_quote(*arg, quote, i);
 		if (*(*arg + i) == '$' && *(*arg + i + 1) != '\0'
-						&& (quote == '\"' || quote == 0))
+				&& (quote == '\"' || quote == 0) && !is_escape(i, quote, *arg))
 		{
 			if (*(*arg + ++i) == '?')
 			{
@@ -84,7 +78,6 @@ char		**parse_command(char *command, char **envp, int status)
 	while (*(argv + i) != NULL)
 	{
 		replace_env(argv + i, envp, status);
-		remove_quotes(*(argv + i));
 		i++;
 	}
 	return (argv);

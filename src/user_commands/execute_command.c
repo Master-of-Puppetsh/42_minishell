@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 20:25:19 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/29 17:20:50 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/06/30 21:02:51 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_pid;
 
-int		execute_command(char *command, char ***envp, int status)
+int			execute_command(char *command, char ***envp, int status)
 {
 	char	**pipelines;
 
@@ -27,12 +27,65 @@ int		execute_command(char *command, char ***envp, int status)
 	return (status);
 }
 
-int		do_execute_command_internal(char **cmd_argv, char **envp,
+void		remove_escapes(char *str)
+{
+	int		i;
+	char	quote;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		quote = check_quote_passing_escape(str, quote, i);
+		if (i > 0 && quote != 1 && quote != '\''
+			&& str[i - 1] == '\\' && is_in_charset(str[i], "$\\\'\""))
+		{
+			ft_memmove(str + i - 1, str + i, ft_strlen(str + i) + 1);
+			i--;
+		}
+		i++;
+	}
+}
+
+void		remove_quotes(char *str)
+{
+	char	quote;
+	int		i;
+
+	quote = 0;
+	i = 0;
+	while (str[i] != '\0')
+	{
+		quote = check_quote_passing_escape(str, quote, i);
+		if ((str[i] == '\'' || str[i] == '\"')
+				&& (quote == str[i] || quote == 1))
+		{
+			if (!(0 < i && str[i - 1] == '\\') ||
+					(quote == 1 && str[i + 1] == '\0'))
+			{
+				ft_memmove(str + i, str + i + 1, ft_strlen(str + i + 1) + 1);
+				i--;
+			}
+		}
+		if (quote == 1)
+			quote = 0;
+		i++;
+	}
+}
+
+int			do_execute_command_internal(char **cmd_argv, char **envp,
 									t_list *redirection_list)
 {
 	int		status;
+	int		i;
 
+	i = 0;
 	status = 0;
+	while (cmd_argv[i])
+	{
+		remove_escapes(cmd_argv[i]);
+		remove_quotes(cmd_argv[i]);
+		i++;
+	}
 	execute_builtin(cmd_argv, &envp, &status);
 	if (status == CMD_NOT_FOUND)
 		execute_program(cmd_argv, envp, &status);
@@ -48,7 +101,7 @@ int		do_execute_command_internal(char **cmd_argv, char **envp,
 	return (status);
 }
 
-int		execute_command_internal(char *command, char ***envp, int status,
+int			execute_command_internal(char *command, char ***envp, int status,
 									int fds[])
 {
 	char	**cmd_argv;
