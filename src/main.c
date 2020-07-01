@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/07/01 18:48:30 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/07/01 20:37:49 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,16 @@ char		*remove_space_around_seperator(char *line)
 	return (line);
 }
 
+void		malloc_envp(char **envp)
+{
+	while (*envp)
+	{
+		if (!(*envp = ft_strdup(*envp)))
+			exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
+		envp++;
+	}
+}
+
 int			main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
@@ -75,6 +85,7 @@ int			main(int argc, char *argv[], char *envp[])
 
 	status = 0;
 	listen_signals();
+	malloc_envp(envp);
 	while (argc == 1 && *argv)
 	{
 		prompt();

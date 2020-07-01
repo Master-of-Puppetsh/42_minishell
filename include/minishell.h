@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/07/01 16:50:57 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/07/01 20:58:41 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,6 @@ int				replace_question_to_status(int status, int i, char **arg);
 int				is_escape(int idx, char quote, char *str);
 char			check_quote_passing_escape(char *str, char quote, int idx);
 void			init_3vars_to_zero(char *var1, int *var2, int *var3);
-
+void			make_quote_printable(char *str);
 
 #	endif

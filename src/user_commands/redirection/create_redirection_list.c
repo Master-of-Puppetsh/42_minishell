@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_redirection_list.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 20:48:39 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/29 16:28:19 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/07/01 20:49:47 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int		set_fds(t_redirection *redirection, char **cmd_argv, int arg_idx)
 		exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
 	if (*filepath == '\0' && cmd_argv[arg_idx + 1] != NULL)
 	{
+		free(filepath);
 		if (!(filepath = ft_strdup(cmd_argv[arg_idx + 1])))
 			exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
 		remove_tab(cmd_argv, arg_idx + 1);
@@ -59,6 +60,7 @@ int		set_fds(t_redirection *redirection, char **cmd_argv, int arg_idx)
 		return (ERROR);
 	redirection->copied_std = dup(redirection->is_stdout);
 	dup2(redirection->fd, redirection->is_stdout);
+	free(filepath);
 	return (SUCCESS);
 }
 
