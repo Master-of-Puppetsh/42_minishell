@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   split_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/14 15:08:30 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/30 21:37:02 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/07/01 18:50:16 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	count_command(char *str, char target)
+int			g_target_flag = 0;
+
+size_t		count_command(char *str, char target)
 {
 	int		target_flag;
 	char	quote;
@@ -41,7 +43,7 @@ size_t	count_command(char *str, char target)
 	return (count);
 }
 
-size_t	ft_wordlen(char *str, char target)
+size_t		ft_wordlen(char *str, char target)
 {
 	size_t		count;
 	char		quote;
@@ -50,7 +52,8 @@ size_t	ft_wordlen(char *str, char target)
 	i = 0;
 	quote = check_quote(str, 0, i);
 	count = 0;
-	while ((quote || str[i] != target) && str[i] != '\0')
+	while ((quote || (str[i] != target || (target != ' '
+			&& is_escape(i, quote, str)))) && str[i] != '\0')
 	{
 		count++;
 		i++;
@@ -59,7 +62,7 @@ size_t	ft_wordlen(char *str, char target)
 	return (count);
 }
 
-char	*ft_commanddup(char *str, char target, int *i)
+char		*ft_commanddup(char *str, char target, int *i)
 {
 	char	*result;
 	char	quote;
@@ -69,7 +72,8 @@ char	*ft_commanddup(char *str, char target, int *i)
 		return (NULL);
 	j = 0;
 	quote = check_quote(str, 0, *i);
-	while ((quote || str[*i] != target) && str[*i] != '\0')
+	while ((quote || (str[*i] != target || (target != ' '
+			&& is_escape(*i, quote, str)))) && str[*i] != '\0')
 	{
 		result[j] = str[*i];
 		j++;
@@ -83,41 +87,43 @@ char	*ft_commanddup(char *str, char target, int *i)
 	return (result);
 }
 
-void	set_flags(char *str, char *quote, char target, int *target_flag)
+void		set_flags(char *str, char *quote, char target, int idx)
 {
-	if (*str == target && (*quote == 0))
-		*target_flag = 1;
-	else if (*str == target && (*quote == 1))
+	if (str[idx] == target && (*quote == 0) &&
+		!(target != ' ' && is_escape(idx, *quote, str)))
+		g_target_flag = 1;
+	else if (str[idx] == target && (*quote == 1)
+		&& !(target != ' ' && is_escape(idx, *quote, str)))
 	{
-		*target_flag = 1;
+		g_target_flag = 1;
 		*quote = 0;
 	}
 	return ;
 }
 
-char	**split_command(char *str, char target)
+char		**split_command(char *str, char target)
 {
 	char	**result;
-	int		target_flag;
 	char	quote;
 	int		i;
 	int		j;
 
 	if (!(result = ft_calloc(sizeof(char *), (count_command(str, target) + 1))))
 		return (NULL);
-	target_flag = 1;
+	g_target_flag = 1;
 	init_3vars_to_zero(&quote, &i, &j);
 	while (str[j] != '\0')
 	{
 		quote = check_quote(str, quote, j);
-		if (str[j] != target && target_flag == 1)
+		if (str[j] != target && g_target_flag == 1
+		&& !(target != ' ' && is_escape(j, quote, str)))
 		{
 			if (!(result[i++] = ft_commanddup(str, target, &j)))
 				return (free_split(result));
-			target_flag = 0;
+			g_target_flag = 0;
 			quote = 0;
 		}
-		set_flags(str + j, &quote, target, &target_flag);
+		set_flags(str, &quote, target, j);
 		if (str[j] != '\0')
 			j++;
 	}
