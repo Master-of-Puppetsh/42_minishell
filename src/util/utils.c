@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 18:21:27 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/30 21:01:42 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/07/06 16:14:25 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void		exit_with_err_msg(char *msg, int status)
 	exit(status);
 }
 
-void		prompt(void)
+int			prompt(void)
 {
 	write(STDERR_FILENO, "\n", 1);
 	ft_putstr_fd("\033[0;36m", STDERR_FILENO);
@@ -47,6 +47,7 @@ void		prompt(void)
 	ft_pwd(STDERR_FILENO);
 	ft_putstr_fd("\033[0m", STDERR_FILENO);
 	write(STDERR_FILENO, "> ", 2);
+	return (1);
 }
 
 void		remove_tab(char **argv, int idx)

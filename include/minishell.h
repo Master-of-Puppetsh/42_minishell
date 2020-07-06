@@ -6,7 +6,7 @@
 /*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/07/01 20:58:41 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:14:46 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ typedef struct	s_redirection
 	int			fd;
 }				t_redirection;
 
+int				print_err_continous_semicolons(int err_type);
+int				check_continuous_semicolons(char *line);
+void			malloc_envp(char **envp);
 void			do_piping(int fds[]);
 char			**get_paths(char *envp[]);
 void			*free_split(char **splitted_str);
@@ -59,7 +62,7 @@ void			exit_with_err_msg(char *msg, int status);
 char			**parse_command(char *command, char **envp, int status);
 void			listen_signals(void);
 char			*read_command_line(int status);
-void			prompt(void);
+int				prompt(void);
 char			check_quote(char *str, char quote, int idx);
 int				execute_command(char *command, char ***envp, int status);
 int				execute_command_internal(char *command, char ***envp,

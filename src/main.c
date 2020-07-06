@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/07/06 15:49:08 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/07/06 16:14:09 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char		*remove_right_space(char *line, int *i)
 	return (line);
 }
 
-char		*remove_space_around_seperator(char *line)
+char		*remove_space_around_separator(char *line)
 {
 	int		i;
 	char	quote;
@@ -66,43 +66,6 @@ char		*remove_space_around_seperator(char *line)
 	return (line);
 }
 
-int		print_err_continous_semicolons(int err_type)
-{
-	ft_putstr_fd("syntax error near unexpected token ", STDERR_FILENO);
-	if (err_type == 1)
-		ft_putendl_fd("';;'", STDERR_FILENO);
-	else
-		ft_putendl_fd("';'", STDERR_FILENO);
-	return (err_type);
-}
-
-int		check_continuous_semicolons(char *line)
-{
-	char	quote;
-	int		idx;
-	int		j;
-	int		has_space;
-
-	init_3vars_to_zero(&quote, &idx, &has_space);
-	while (line[idx] != '\0')
-	{
-		if (!(quote = check_quote(line, quote, idx)) && line[idx] == ';')
-		{
-			j = 0;
-			while (line[idx + ++j] != '\0' && (line[idx + j] == ' ' || line[idx + j] == ';'))
-			{
-				has_space = line[idx + j] == ' ' ? 1 : has_space;
-				if (line[idx + j] == ';')
-					return (print_err_continous_semicolons(1 + has_space));
-			}
-			has_space = 0;
-		}
-		quote = quote == 1 ? 0 : quote;
-		idx++;
-	}
-	return (0);
-}
-
 int			main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
@@ -113,16 +76,14 @@ int			main(int argc, char *argv[], char *envp[])
 	status = 0;
 	listen_signals();
 	malloc_envp(envp);
-	while (argc == 1 && *argv)
+	while (argc == 1 && *argv && prompt())
 	{
-		prompt();
-		line = read_command_line(status);
-		if (check_continuous_semicolons(line))
+		if (check_continuous_semicolons((line = read_command_line(status))))
 		{
 			free(line);
 			continue ;
 		}
-		line = remove_space_around_seperator(line);
+		line = remove_space_around_separator(line);
 		if (!(commands = split_command(line, ';')))
 			return (1);
 		free(line);
