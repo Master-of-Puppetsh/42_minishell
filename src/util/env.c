@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 16:21:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/29 16:12:15 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/07/02 15:37:36 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		do_replace_env(int i, char **arg, char **envp)
 
 	j = 0;
 	while (!(*(*arg + i + j) == '\0')
-			&& !is_in_charset(*(*arg + i + j), "\'\"$ "))
+			&& !is_in_charset(*(*arg + i + j), "\'\"$ !#%*+,-./[]^`{}~"))
 		j++;
 	if (!(name = ft_substr((*arg + i), 0, j)))
 		exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);

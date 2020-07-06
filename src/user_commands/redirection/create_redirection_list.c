@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 20:48:39 by hyekim            #+#    #+#             */
-/*   Updated: 2020/06/29 16:28:19 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/07/02 16:34:03 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,17 @@
 int		find_redirection_mark(char *str)
 {
 	int			i;
+	char		quote;
 
 	i = 0;
+	quote = 0;
 	while (*(str + i))
 	{
-		if (*(str + i) == '>' || *(str + i) == '<')
+		quote = check_quote(str, quote, i);
+		if (quote == 0 && (*(str + i) == '>' || *(str + i) == '<'))
 			return (i);
+		if (quote == 1)
+			quote = 0;
 		i++;
 	}
 	return (FAIL);
