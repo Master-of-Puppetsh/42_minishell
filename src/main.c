@@ -6,7 +6,7 @@
 /*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/07/02 16:39:15 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/07/06 15:49:08 by hjeon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int			main(int argc, char *argv[], char *envp[])
 
 	status = 0;
 	listen_signals();
+	malloc_envp(envp);
 	while (argc == 1 && *argv)
 	{
 		prompt();

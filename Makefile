@@ -20,6 +20,7 @@ src/util/parse_command.c \
 src/util/read_command_line.c \
 src/util/split_command.c \
 src/util/utils.c \
+src/util/utils2.c \
 src/util/check_quote.c
 
 OBJS = $(SRCS:.c=.o)

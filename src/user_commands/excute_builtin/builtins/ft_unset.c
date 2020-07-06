@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/17 15:29:37 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/27 19:36:59 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/07/01 20:30:09 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ int		ft_unset(char **target, char ***envp)
 		{
 			if (!(name = get_name((*envp)[i])))
 				return (ERROR);
-			printf("%s\n", name);
-			printf("%s\n", *target);
-			if (!ft_strncmp(name, *target, ft_strlen(name)))
+			if (!ft_strncmp(name, *target, ft_strlen(name) + 1))
 			{
+				free((*envp)[i]);
 				last_str = pop_string(*envp);
 				(*envp)[i] = last_str;
 			}
+			free(name);
 		}
 		target++;
 	}

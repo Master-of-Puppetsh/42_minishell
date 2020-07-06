@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 20:25:19 by hjeon             #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2020/07/02 16:34:04 by hjeon            ###   ########.fr       */
+=======
+/*   Updated: 2020/07/01 20:58:06 by hyekim           ###   ########.fr       */
+>>>>>>> 7647b8a0dc43390a85c8f6794ffb4fe641d00cbe
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +40,11 @@ void		remove_escapes(char *str)
 	quote = 0;
 	while (str[i] != '\0')
 	{
-		quote = check_quote_passing_escape(str, quote, i);
-		if (i > 0 && quote != 1 && quote != '\''
-			&& str[i - 1] == '\\' && is_in_charset(str[i], "$\\\'\""))
+		quote = check_quote(str, quote, i);
+		if (i > 0 && quote != 1 && quote != '\'' && str[i - 1] == '\\')
 		{
+			if (str[i] == '\'' || str[i] == '\"')
+				str[i] -= 100;
 			ft_memmove(str + i - 1, str + i, ft_strlen(str + i) + 1);
 			i--;
 		}
@@ -73,7 +78,7 @@ void		remove_quotes(char *str)
 	}
 }
 
-int			do_execute_command_internal(char **cmd_argv, char **envp,
+int			do_execute_command_internal(char **cmd_argv, char ***envp,
 									t_list *redirection_list)
 {
 	int		status;
@@ -85,11 +90,12 @@ int			do_execute_command_internal(char **cmd_argv, char **envp,
 	{
 		remove_escapes(cmd_argv[i]);
 		remove_quotes(cmd_argv[i]);
+		make_quote_printable(cmd_argv[i]);
 		i++;
 	}
-	execute_builtin(cmd_argv, &envp, &status);
+	execute_builtin(cmd_argv, envp, &status);
 	if (status == CMD_NOT_FOUND)
-		execute_program(cmd_argv, envp, &status);
+		execute_program(cmd_argv, *envp, &status);
 	if (status == CMD_NOT_FOUND)
 	{
 		if (is_in_charset('/', cmd_argv[0]))
@@ -124,7 +130,7 @@ int			execute_command_internal(char *command, char ***envp, int status,
 		status = WEXITSTATUS(status);
 	}
 	if (g_pid == 0)
-		status = do_execute_command_internal(cmd_argv, *envp, redirection_lst);
+		status = do_execute_command_internal(cmd_argv, envp, redirection_lst);
 	reset_std(redirection_lst);
 	ft_lstclear(&redirection_lst, &free);
 	g_pid = -1;
