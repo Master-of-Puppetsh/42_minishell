@@ -6,7 +6,7 @@
 /*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 20:25:19 by hjeon             #+#    #+#             */
-/*   Updated: 2020/07/09 17:56:18 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/07/09 22:59:00 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void		remove_escapes(char *str)
 	{
 		quote = check_quote(str, quote, i);
 		if (i > 0 && quote != 1 && quote != '\'' && str[i - 1] == '\\'
-			&& is_in_charset(str[i], "$\\\'\""))
+			&& (is_in_charset(str[i], "$\\\'\"") || quote == 0))
 		{
 			if (str[i] == '\'' || str[i] == '\"' || str[i] == '\\')
 				str[i] -= 100;
