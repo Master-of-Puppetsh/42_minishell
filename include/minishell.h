@@ -83,5 +83,8 @@ int				is_escape(int idx, char quote, char *str);
 char			check_quote_passing_escape(char *str, char quote, int idx);
 void			init_3vars_to_zero(char *var1, int *var2, int *var3);
 void			make_quote_printable(char *str);
+void			remove_escapes(char *str);
+void			remove_quotes(char *str);
+void			clean_arg(char *arg);
 
 #	endif

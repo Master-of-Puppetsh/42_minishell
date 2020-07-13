@@ -38,7 +38,7 @@ void		remove_escapes(char *str)
 	{
 		quote = check_quote(str, quote, i);
 		if (i > 0 && quote != 1 && quote != '\'' && str[i - 1] == '\\'
-			&& (is_in_charset(str[i], "$\\\'\"") || quote == 0))
+			&& (is_in_charset(str[i], "$\\\"") || quote == 0))
 		{
 			if (str[i] == '\'' || str[i] == '\"' || str[i] == '\\')
 				str[i] -= 100;
@@ -84,12 +84,7 @@ int			do_execute_command_internal(char **cmd_argv, char ***envp,
 	i = 0;
 	status = 0;
 	while (cmd_argv[i])
-	{
-		remove_escapes(cmd_argv[i]);
-		remove_quotes(cmd_argv[i]);
-		make_quote_printable(cmd_argv[i]);
-		i++;
-	}
+		clean_arg(cmd_argv[i++]);
 	execute_builtin(cmd_argv, envp, &status);
 	if (status == CMD_NOT_FOUND)
 		execute_program(cmd_argv, *envp, &status);

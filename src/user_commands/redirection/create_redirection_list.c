@@ -58,6 +58,7 @@ int		set_fds(t_redirection *redirection, char **cmd_argv, int arg_idx)
 			exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
 		remove_tab(cmd_argv, arg_idx + 1);
 	}
+	clean_arg(filepath);
 	redirection->fd = open(filepath, O_RDWR | O_CREAT * redirection->is_stdout |
 					O_TRUNC * !is_append * redirection->is_stdout |
 					O_APPEND * is_append, 0777);

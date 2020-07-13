@@ -64,8 +64,16 @@ void	make_quote_printable(char *str)
 {
 	while (*str != '\0')
 	{
-		if (*str == ('\'' - 100) || *str == ('\"' - 100) || *str == ('\\' - 100))
+		if (*str == ('\'' - 100) || *str == ('\"' - 100)
+			|| *str == ('\\' - 100))
 			*str += 100;
 		str++;
 	}
+}
+
+void	clean_arg(char *arg)
+{
+	remove_escapes(arg);
+	remove_quotes(arg);
+	make_quote_printable(arg);
 }
