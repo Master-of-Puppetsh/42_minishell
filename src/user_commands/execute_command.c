@@ -118,7 +118,7 @@ int			execute_command_internal(char *command, char ***envp, int status,
 	if (redirection_lst)
 	{
 		if ((g_pid = fork()) > 0)
-			wait(&status);
+			waitpid(g_pid, &status, 0);
 		status = WEXITSTATUS(status);
 	}
 	if (g_pid == 0)

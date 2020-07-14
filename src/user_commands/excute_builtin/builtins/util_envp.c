@@ -64,8 +64,8 @@ char	*pop_string(char **envp)
 	i = -1;
 	while (*(envp + ++i))
 		;
-	last_string = *(envp + i);
-	*(envp + i) = NULL;
+	last_string = *(envp + i - 1);
+	*(envp + i - 1) = NULL;
 	return (last_string);
 }
 
