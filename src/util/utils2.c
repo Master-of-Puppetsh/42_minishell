@@ -6,7 +6,7 @@
 /*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/01 20:58:22 by hyekim            #+#    #+#             */
-/*   Updated: 2020/07/09 17:56:41 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/07/17 21:02:43 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,24 @@ int		check_continuous_semicolons(char *line)
 	return (0);
 }
 
-void	malloc_envp(char **envp)
+char	**malloc_envp(char **envp)
 {
+	char	**malloced_envp;
+	int		i;
+
+	i = -1;
+	while (*(envp + ++i))
+		;
+	malloced_envp = ft_calloc(sizeof(char *), i + 1);
+	i = 0;
 	while (*envp)
 	{
-		if (!(*envp = ft_strdup(*envp)))
+		if (!(*(malloced_envp + i) = ft_strdup(*envp)))
 			exit_with_err_msg(ERRMSG_MALLOC, CMD_ERR);
 		envp++;
+		i++;
 	}
+	return (malloced_envp);
 }
 
 void	make_quote_printable(char *str)

@@ -6,7 +6,7 @@
 /*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:39:24 by hyekim            #+#    #+#             */
-/*   Updated: 2020/07/06 16:14:46 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/07/17 21:00:34 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct	s_redirection
 
 int				print_err_continous_semicolons(int err_type);
 int				check_continuous_semicolons(char *line);
-void			malloc_envp(char **envp);
+char			**malloc_envp(char **envp);
 void			do_piping(int fds[]);
 char			**get_paths(char *envp[]);
 void			*free_split(char **splitted_str);

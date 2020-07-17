@@ -6,7 +6,7 @@
 /*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 15:26:25 by hyekim            #+#    #+#             */
-/*   Updated: 2020/07/06 16:14:09 by hyekim           ###   ########.fr       */
+/*   Updated: 2020/07/17 21:00:57 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int			main(int argc, char *argv[], char *envp[])
 
 	status = 0;
 	listen_signals();
-	malloc_envp(envp);
+	envp = malloc_envp(envp);
 	while (argc == 1 && *argv && prompt())
 	{
 		if (check_continuous_semicolons((line = read_command_line(status))))

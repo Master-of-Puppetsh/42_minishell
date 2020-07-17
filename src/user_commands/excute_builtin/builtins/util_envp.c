@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hjeon <hjeon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyekim <hyekim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 14:23:02 by hjeon             #+#    #+#             */
-/*   Updated: 2020/06/29 16:07:25 by hjeon            ###   ########.fr       */
+/*   Updated: 2020/07/17 21:01:11 by hyekim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ int		expand_envp(char ***envp)
 {
 	char	**expanded_envp;
 	int		i;
+	char	**temp;
 
 	i = -1;
+	temp = *envp;
 	while (*(*envp + ++i))
 		;
 	if (!(expanded_envp = ft_calloc(sizeof(char *), i + 2)))
@@ -45,6 +47,7 @@ int		expand_envp(char ***envp)
 	i = -1;
 	while (*(*envp + ++i))
 		*(expanded_envp + i) = *(*envp + i);
+	free(temp);
 	*envp = expanded_envp;
 	return (i + 1);
 }
